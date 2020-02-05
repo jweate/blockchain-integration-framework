@@ -11,6 +11,7 @@ networks:
 services:
   quorum_validator1:
     image: "federation/validator"
+    restart: always
     environment:
       ETCD_HOSTS: "http://etcd1:2379,http://etcd2:2379,http://etcd3:2379"
       CLIENT_REP_ADDR: "tcp://192.20.0.2:7005"
@@ -20,7 +21,7 @@ services:
       USER_NAME: "test"
       PASSWORD: "A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3"
       DLT_TYPE: "QUORUM"
-      API_PORT: 9005
+      BIF_API_PORT: 9005
     mem_limit: 6g
     networks:
         quorum-network:
@@ -39,6 +40,7 @@ services:
 
   quorum_validator2:
     image: "federation/validator"
+    restart: always
     environment:
       ETCD_HOSTS: "http://etcd1:2379,http://etcd2:2379,http://etcd3:2379"
       CLIENT_REP_ADDR: "tcp://192.20.0.3:7006"
@@ -48,7 +50,7 @@ services:
       PASSWORD: "A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3"
       URL: "http://192.20.0.1:5051"
       DLT_TYPE: "QUORUM"
-      API_PORT: 9006
+      BIF_API_PORT: 9006
     mem_limit: 6g
     expose:
       - "5051"
@@ -67,6 +69,7 @@ services:
 
   quorum_validator3:
     image: "federation/validator"
+    restart: always
     environment:
       ETCD_HOSTS: "http://etcd1:2379,http://etcd2:2379,http://etcd3:2379"
       CLIENT_REP_ADDR: "tcp://192.20.0.4:7007"
@@ -76,7 +79,7 @@ services:
       PASSWORD: "A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3"
       URL: "http://192.20.0.1:5052"
       DLT_TYPE: "QUORUM"
-      API_PORT: 9007
+      BIF_API_PORT: 9007
     mem_limit: 6g
     expose:
       - "5052"
@@ -95,6 +98,7 @@ services:
 
   quorum_validator4:
     image: "federation/validator"
+    restart: always
     environment:
       ETCD_HOSTS: "http://etcd1:2379,http://etcd2:2379,http://etcd3:2379"
       CLIENT_REP_ADDR: "tcp://192.20.0.5:7008"
@@ -104,7 +108,7 @@ services:
       PASSWORD: "A665A45920422F9D417E4867EFDC4FB8A04A1F3FFF1FA07E998E86F7F7A27AE3"
       URL: "http://192.20.0.1:5053"
       DLT_TYPE: "QUORUM"
-      API_PORT: 9008
+      BIF_API_PORT: 9008
     mem_limit: 6g
     expose:
       - "5053"
@@ -123,6 +127,7 @@ services:
 
   etcd1:
     image: bitnami/etcd:3.4.3
+    restart: always
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_NAME=etcd1
@@ -141,6 +146,7 @@ services:
 
   etcd2:
     image: bitnami/etcd:3.4.3
+    restart: always
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_NAME=etcd2
@@ -159,6 +165,7 @@ services:
 
   etcd3:
     image: bitnami/etcd:3.4.3
+    restart: always
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_NAME=etcd3

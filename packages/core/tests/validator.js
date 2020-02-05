@@ -20,6 +20,7 @@ describe(`Validator module`, function() {
     clientRepAddr: `tcp://127.0.0.1:17001`,
     pubAddr: `tcp://127.0.0.1:13001`,
     repAddr: `tcp://127.0.0.1:15001`,
+    bifApiPort: 0
   };
 
   before(function() {
@@ -149,6 +150,7 @@ describe(`Validator module`, function() {
           leaderPubAddr: `tcp://127.0.0.1:13002`,
           leaderRepAddr: `tcp://127.0.0.1:15002`,
           leaderClientRepAddr: `tcp://127.0.0.1:17002`,
+          bifApiPort: 0
         };
         const validator = new Validator(new Connector.FABRIC(config.blockchains.fabric), followerOptions);
         // Validator starting as follower 3
@@ -258,6 +260,7 @@ describe(`Validator module`, function() {
         pubAddr: `tcp://127.0.0.1:13002`,
         repAddr: `tcp://127.0.0.1:15002`,
         type: fedcom.VALIDATOR_TYPE.LEADER,
+        bifApiPort: 0,
       };
       const validator = new Validator(new Connector.FABRIC(config.blockchains.fabric), leaderOptions);
 
@@ -309,6 +312,7 @@ describe(`Validator module`, function() {
         pubAddr: `tcp://127.0.0.1:13003`,
         repAddr: `tcp://127.0.0.1:15003`,
         type: fedcom.VALIDATOR_TYPE.LEADER,
+        bifApiPort: 0,
       };
       const validator = new Validator(new Connector.FABRIC(config.blockchains.fabric), leaderOptions);
 
@@ -530,6 +534,7 @@ describe(`Validator module`, function() {
           leaderRepAddr: `tcp://127.0.0.1:15006`,
           leaderClientRepAddr: `tcp://127.0.0.1:17006`,
           type: fedcom.VALIDATOR_TYPE.FOLLOWER,
+          bifApiPort: 0
         };
         follower = new Validator(new Connector.FABRIC(config.blockchains.fabric), followerOptions);
         follower.startClientServer();

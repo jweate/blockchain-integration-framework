@@ -14,6 +14,7 @@ const ConnectorCorda = require(`./corda/connector`);
     dlType: process.env.DLT_TYPE,
     pubKey: keypair.pk,
     privKey: keypair.sk,
+    bifApiPort: process.env.BIF_API_PORT,
   };
   const connectorOptions = {
     username: process.env.USER_NAME,

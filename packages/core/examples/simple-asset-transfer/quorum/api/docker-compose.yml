@@ -18,6 +18,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     image: "federation/qserver"
+    restart: always
 
     # Overwrite any env var defined in .env file (if required)
     environment:
@@ -48,6 +49,7 @@ services:
       # allowing you to modify the code without having to rebuild the image.
       - build:/src/build/
     image: "federation/qserver"
+    restart: always
 
     # Overwrite any env var defined in .env file (if required)
     environment:
@@ -75,6 +77,7 @@ services:
       # allowing you to modify the code without having to rebuild the image.
       - build:/src/build/
     image: "federation/qserver"
+    restart: always
 
     # Overwrite any env var defined in .env file (if required)
     environment:
@@ -102,6 +105,7 @@ services:
       # allowing you to modify the code without having to rebuild the image.
       - build:/src/build/
     image: "federation/qserver"
+    restart: always 
 
     # Overwrite any env var defined in .env file (if required)
     environment:

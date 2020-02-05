@@ -9,6 +9,7 @@ const conf = require(`../config.json`);
 const Connector = require(`./pluggins/Connector`);
 const Crypto = require(`./crypto-utils`);
 const Multisig = require(`./Multisig`);
+const FederationAPIServer = require(`./FederationAPIServer`);
 
 const logger = log4js.getLogger(`Validator`);
 logger.level = `DEBUG`;
@@ -47,6 +48,7 @@ class Validator {
    * @param {String} options.clientRepAddr Client Rep address
    * @param {String} options.pubAddr Public address
    * @param {String} options.repAddr Rep address
+   * @param {String} options.bifApiPort HTTP PORT for the API server to listen on
    */
   constructor(blockchainClient, options) {
     if (!(blockchainClient instanceof Connector)) {
@@ -191,15 +193,17 @@ class Validator {
    * Start Validator
    * @return {void}
    */
-  start() {
+  async start() {
     this.startClientServer();
+    await this.startApiServer();
   }
 
   /**
    * Stop Validator
    * @return {void}
    */
-  stop() {
+  async stop() {
+    await this.stopApiServer();
     if (this.isCurrentNodeLeader()) {
       clearInterval(this.intervalExec);
       this.requestSocket.close();
@@ -250,6 +254,17 @@ class Validator {
     this.clientRepSocket = zmq.socket(`rep`);
     this.clientRepSocket.bindSync(this.clientRepAddr);
     this.clientRepSocket.on(`message`, fedcom.ValidatorClientServerMessage.bind(this));
+  }
+
+  async startApiServer(){
+    this.apiServer = new FederationAPIServer({ bifApiPort: this.bifApiPort });
+    await this.apiServer.startApiServer();
+  }
+
+  async stopApiServer() {
+    if (this.apiServer) {
+      await this.apiServer.stopApiServer();
+    }
   }
 
   /**

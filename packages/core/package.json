@@ -14,11 +14,13 @@
   "scripts": {
     "docs": "./node_modules/.bin/jsdoc -c jsdoc.config.json",
     "lint": "esw 'src/**/*.js' 'tests/*.js' 'examples/simple-asset-transfer/tests/*.js' 'examples/simple-asset-transfer/fabric/*.js' 'examples/simple-asset-transfer/quorum/*.js' --color",
-    "test": "cross-env NODE_ENV=test ./node_modules/.bin/mocha --ui bdd --reporter spec --colors tests/*.js --recursive --exit",
-    "test:bc": "BLOCKCHAIN=true npm run test",
+    "test": "cross-env NODE_ENV=test BIF_API_PORT=0 ./node_modules/.bin/mocha --ui bdd --reporter spec --colors tests/*.js --recursive --exit",
+    "test:bc": "BLOCKCHAIN=true BIF_API_PORT=0 npm run test",
     "upgrade-interactive": "npm-check --update"
   },
   "dependencies": {
+    "body-parser": "1.19.0",
+    "cors": "2.8.5",
     "etcd3": "0.2.13",
     "log4js": "^4.1.0",
     "prettier": "^1.16.4",

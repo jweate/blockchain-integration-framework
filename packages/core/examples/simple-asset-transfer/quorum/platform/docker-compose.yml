@@ -9,7 +9,7 @@
 version: "3.6"
 x-quorum-def:
   &quorum-def
-  restart: "on-failure"
+  restart: always
   image: "${QUORUM_DOCKER_IMAGE:-quorumengineering/quorum:2.3.0}"
   expose:
     - "21000"
@@ -78,7 +78,7 @@ x-tx-manager-def:
   expose:
     - "9000"
     - "9080"
-  restart: "no"
+  restart: always 
   healthcheck:
     test: ["CMD-SHELL", "[ -S /qdata/tm/tm.ipc ] || exit 1"]
     interval: 3s

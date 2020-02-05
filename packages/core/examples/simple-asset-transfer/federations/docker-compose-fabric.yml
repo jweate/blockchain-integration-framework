@@ -11,6 +11,7 @@ networks:
 services:
   fabric_validator1:
     image: "federation/validator"
+    restart: always
     environment:
       ETCD_HOSTS: "http://etcd1:2379,http://etcd2:2379,http://etcd3:2379"
       CLIENT_REP_ADDR: "tcp://172.20.0.5:7001"
@@ -22,7 +23,7 @@ services:
       ORG_NAME: "Org1"
       DLT_TYPE: "FABRIC"
       TYPE: "LEADER"
-      API_PORT: 9001
+      BIF_API_PORT: 9001
     mem_limit: 6g
     networks:
         fabric-network:
@@ -41,6 +42,7 @@ services:
 
   fabric_validator2:
     image: "federation/validator"
+    restart: always
     environment:
       ETCD_HOSTS: "http://etcd1:2379,http://etcd2:2379,http://etcd3:2379"
       CLIENT_REP_ADDR: "tcp://172.20.0.6:7002"
@@ -52,7 +54,7 @@ services:
       PEER_NAME: "peer1.org1.example.com"
       DLT_TYPE: "FABRIC"
       TYPE: "FOLLOWER"
-      API_PORT: 9002
+      BIF_API_PORT: 9002
     mem_limit: 6g
     expose:
       - "4000"
@@ -71,6 +73,7 @@ services:
 
   fabric_validator3:
     image: "federation/validator"
+    restart: always
     environment:
       ETCD_HOSTS: "http://etcd1:2379,http://etcd2:2379,http://etcd3:2379"
       CLIENT_REP_ADDR: "tcp://172.20.0.7:7003"
@@ -82,7 +85,7 @@ services:
       PEER_NAME: "peer0.org2.example.com"
       TYPE: "FOLLOWER"
       DLT_TYPE: "FABRIC"
-      API_PORT: 9003
+      BIF_API_PORT: 9003
     mem_limit: 6g
     expose:
       - "4000"
@@ -101,6 +104,7 @@ services:
 
   fabric_validator4:
     image: "federation/validator"
+    restart: always
     environment:
       ETCD_HOSTS: "http://etcd1:2379,http://etcd2:2379,http://etcd3:2379"
       CLIENT_REP_ADDR: "tcp://172.20.0.8:7004"
@@ -112,7 +116,7 @@ services:
       PEER_NAME: "peer1.org2.example.com"
       DLT_TYPE: "FABRIC"
       TYPE: "FOLLOWER"
-      API_PORT: 9004
+      BIF_API_PORT: 9004
     mem_limit: 6g
     expose:
       - "4000"
@@ -131,6 +135,7 @@ services:
 
   etcd1:
     image: bitnami/etcd:3
+    restart: always
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_NAME=etcd1
@@ -147,6 +152,7 @@ services:
 
   etcd2:
     image: bitnami/etcd:3
+    restart: always
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_NAME=etcd2
@@ -163,6 +169,7 @@ services:
 
   etcd3:
     image: bitnami/etcd:3
+    restart: always
     environment:
       - ALLOW_NONE_AUTHENTICATION=yes
       - ETCD_NAME=etcd3

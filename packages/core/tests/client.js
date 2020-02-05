@@ -131,6 +131,7 @@ describe(`Client module`, function() {
         pubAddr: `tcp://127.0.0.1:3103`,
         repAddr: `tcp://127.0.0.1:5103`,
         dlType: `FABRIC`,
+        bifApiPort: 0
       };
       const connector1 = new Connector.FABRIC(conf.blockchains.fabric);
 
@@ -152,6 +153,7 @@ describe(`Client module`, function() {
         pubAddr: `tcp://127.0.0.1:3104`,
         repAddr: `tcp://127.0.0.1:5104`,
         dlType: `FABRIC`,
+        bifApiPort: 0
       };
       const connector2 = new Connector.FABRIC(conf.blockchains.fabric);
 
