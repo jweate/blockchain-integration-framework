@@ -120,14 +120,13 @@ class Validator {
     const tryDelayMs = 5000;
     while (++tryIndex < maxTries && !didSucceed) {
       try {
-        logger.debug(`Calling attemptToBecomeLeader() ${maxTries}/${tryIndex}`);
         await this.attemptToBecomeLeader(theLease);
         didSucceed = true;
       } catch (ex) {
         didSucceed = false;
         lastError = ex;
         logger.debug(`Will re-try attemptToBecomeLeader() ...`);
-        await new Promise((resolve) => setTimeout(resolve, tryDelayMs));
+        await new Promise(resolve => setTimeout(resolve, tryDelayMs));
       }
     }
     if (!didSucceed) {
@@ -160,7 +159,7 @@ class Validator {
 
   attemptToBecomeLeader(theLease) {
     if (this.isCurrentNodeLeader()) {
-      return;
+      return Promise.resolve();
     }
     return this.etcdClient
       .if(BIF_LEADER, 'Lease', '==', 0)
@@ -168,8 +167,7 @@ class Validator {
       .else(this.etcdClient.get(BIF_LEADER))
       .commit()
       .then(txnResponse => {
-        logger.debug(`attemptToBecomeLeader() succeeded=${txnResponse.succeeded}`);
-        let newLeaderNodeInfo
+        let newLeaderNodeInfo;
         if (txnResponse.succeeded) {
           newLeaderNodeInfo = this.selfNodeInfo;
         } else {
@@ -177,12 +175,13 @@ class Validator {
           // https://mixer.github.io/etcd3/interfaces/rpc_.itxnresponse.html
           const { responses } = txnResponse;
           const [getBifLeaderResponse] = responses;
+          // eslint-disable-next-line camelcase
           const { response_range } = getBifLeaderResponse;
+          // eslint-disable-next-line camelcase
           const { kvs } = response_range;
           const [newLeaderNodeInfoEntry] = kvs;
           const { value: newLeaderNodeInfoBuffer } = newLeaderNodeInfoEntry;
           const newLeaderNodeInfoJson = newLeaderNodeInfoBuffer.toString('utf8');
-          logger.debug(`attemptToBecomeLeader() newLeaderNodeInfoJson=${newLeaderNodeInfoJson}`);
           newLeaderNodeInfo = JSON.parse(newLeaderNodeInfoJson);
         }
         this.switchToNewLeader(newLeaderNodeInfo);
@@ -218,9 +217,6 @@ class Validator {
    * @return {void}
    */
   startAsLeader() {
-    logger.debug(`Starting as Leader ...`);
-    logger.debug(`I am : (${this.pubAddr}, ${this.repAddr}, ${this.clientRepAddr})`);
-
     this.type = fedcom.VALIDATOR_TYPE.LEADER;
     this.publishSocket = zmq.socket(`pub`);
     this.publishSocket.bindSync(this.leaderPubAddr);
@@ -235,9 +231,6 @@ class Validator {
    * @return {void}
    */
   startAsFollower() {
-    logger.debug(`Starting as Follower... `);
-    logger.debug(`My Leader is : (${this.leaderPubAddr}, ${this.leaderRepAddr}, ${this.leaderClientRepAddr})`);
-
     this.type = fedcom.VALIDATOR_TYPE.FOLLOWER;
     this.publishSocket = zmq.socket(`sub`);
     this.publishSocket.connect(this.leaderPubAddr);
@@ -276,11 +269,13 @@ class Validator {
    * @returns {string}
    */
   async checkData(type, dataToSign, targetDLTType) {
+    logger.debug('checkData() ', { type, dataToSign, targetDLTType });
     const typeError = new Error(`Unknown sign protocol: ${type}`);
     switch (type) {
       case `ASSET_ID`:
         try {
           const asset = await this.blockchainClient.getAsset(dataToSign, targetDLTType);
+          logger.debug('checkData() ', { asset });
           if (asset && asset.locked) {
             const data = JSON.stringify(asset);
             return data;
@@ -308,12 +303,14 @@ class Validator {
    * @returns {Promise<DataSignResult>} DataSignResult
    */
   async dataSign(type, dataToSign, targetDLTType) {
+    logger.debug('dataSign() ', { type, dataToSign, targetDLTType });
     const invalidError = new Error(`request rejected by validator`);
     try {
       const data = await this.checkData(type, dataToSign, targetDLTType);
       if (data) {
         logger.debug(`Signing the following asset: '${data}'`);
         const signature = await Crypto.signMsg(data, this.privKey, targetDLTType);
+        logger.debug(`Signed OK: `, { signature, data });
         return { signature, data };
       }
       throw invalidError;
@@ -330,6 +327,7 @@ class Validator {
    * @return {Promise<Boolean>} success / error
    */
   async broadcastSignRequest(type, data, targetDLTType) {
+    logger.debug('broadcastSignRequest', { type, data, targetDLTType });
     // Leader starts the process of gathering signatures only if the asset exists and is locked
     try {
       const leaderSignature = await this.dataSign(type, data, targetDLTType);

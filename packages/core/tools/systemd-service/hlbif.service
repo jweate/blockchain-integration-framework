@@ -1,0 +1,14 @@
+[Unit]
+Description=Responsible for reviving the BIF Demo environment in the event of a reboot (planned or unplanned)
+After=network.target
+
+[Service]
+Type=forking
+User=peter
+TimeoutSec=2000
+WorkingDirectory=/home/peter/a/blockchain/blockchain-integration-framework/packages/core/
+ExecStart=/home/peter/a/blockchain/blockchain-integration-framework/packages/core/tools/ci.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
