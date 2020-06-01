@@ -1,27 +1,19 @@
 version: "3.6"
 services:
-  node_a:
+  all_in_one:
     build:
       context: .
-      args:
-        PARTY: PartyA
-        RPC: 10002
-        P2P: 10502
     stdin_open: true
     tty: true
-    volumes:
-      - "additional-node-infos:/opt/corda/additional-node-infos"
-  node_b:
-    build:
-      context: .
-      args:
-        PARTY: PartyB
-        RPC: 10004
-        P2P: 10504
-    stdin_open: true
-    tty: true
-    volumes:
-      - "additional-node-infos:/opt/corda/additional-node-infos"
+#  node_b:
+#    build:
+#      context: .
+#      args:
+#        PARTY: PartyB
+#        RPC: 10004
+#        P2P: 10504
+#    stdin_open: true
+#    tty: true
 #  notary:
 #    build:
 #      context: .
