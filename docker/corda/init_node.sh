@@ -41,5 +41,18 @@ p2p_port=$3
 echo "Genearting node.conf for $1..."
 generate_config party_name rpc_port p2p_port
 
-echo "Starting Corda node..."
+echo "Generating nodeInfo..."
+java -jar /opt/corda/corda.jar --base-directory=/opt/corda --just-generate-node-info
+
+echo "Adding node info to volume"
+cp /opt/corda/nodeInfo-* /opt/corda/additional-node-infos
+
+echo "Starting corda node..."
 java -jar /opt/corda/corda.jar --base-directory=/opt/corda
+#
+#P1=$!
+#
+#sleep 60
+#echo "Adding node info to volume"
+#cp /opt/corda/nodeInfo-* /opt/corda/additional-node-infos
+#fg $P1

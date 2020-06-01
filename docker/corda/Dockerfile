@@ -22,7 +22,7 @@ RUN mkdir -p /opt/corda/drivers
 RUN mkdir -p /opt/corda/logs
 RUN mkdir -p /opt/corda/bin
 RUN mkdir -p /opt/corda/additional-node-infos
-
+RUN mkdir -p /volumeData
 RUN addgroup corda && \
     useradd corda -g corda -m -d /opt/corda
 

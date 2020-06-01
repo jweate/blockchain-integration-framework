@@ -7,12 +7,10 @@ services:
         PARTY: PartyA
         RPC: 10002
         P2P: 10502
-#    environment:
-#      PARTY: PartyA
-#      RPC_PORT: 10002
-#      P2P_PORT: 10502
     stdin_open: true
     tty: true
+    volumes:
+      - "additional-node-infos:/opt/corda/additional-node-infos"
   node_b:
     build:
       context: .
@@ -20,12 +18,10 @@ services:
         PARTY: PartyB
         RPC: 10004
         P2P: 10504
-#    environment:
-#      PARTY: PartyB
-#      RPC_PORT: 10004
-#      P2P_PORT: 10504
     stdin_open: true
     tty: true
+    volumes:
+      - "additional-node-infos:/opt/corda/additional-node-infos"
 #  notary:
 #    build:
 #      context: .
