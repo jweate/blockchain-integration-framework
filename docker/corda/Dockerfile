@@ -1,6 +1,7 @@
 FROM azul/zulu-openjdk:8u192
 FROM corda/corda-zulu-4.0:latest AS corda
 
+ADD corda-source /opt/corda/corda-source
 
 # create party A dir structure
 RUN echo "Creating node directory structure for PartyA"
@@ -27,13 +28,12 @@ RUN mkdir -p /opt/corda/partyB/additional-node-infos
 RUN mkdir -p /opt/corda/bin
 COPY --from=corda /opt/corda/bin/ /opt/corda/bin/
 
+
 WORKDIR /opt/corda
 
 # set up node file for party A
 RUN cp /opt/corda/bin/corda.jar /opt/corda/partyA/corda.jar
 ADD network-parameters /opt/corda/partyA/network-parameters
-ADD workflows-0.1.jar /opt/corda/partyA/cordapps/workflows-0.1.jar
-ADD contracts-0.1.jar /opt/corda/partyA/cordapps/contracts-0.1.jar
 ADD PartyA/certificates/nodekeystore.jks /opt/corda/partyA/certificates/nodekeystore.jks
 ADD PartyA/certificates/truststore.jks /opt/corda/partyA/certificates/truststore.jks
 ADD PartyA/certificates/sslkeystore.jks /opt/corda/partyA/certificates/sslkeystore.jks
@@ -43,8 +43,6 @@ ADD additional-node-infos /opt/corda/partyA/additional-node-infos
 # set up node file for party B
 RUN cp /opt/corda/bin/corda.jar /opt/corda/partyB/corda.jar
 ADD network-parameters /opt/corda/partyB/network-parameters
-ADD workflows-0.1.jar /opt/corda/partyB/cordapps/workflows-0.1.jar
-ADD contracts-0.1.jar /opt/corda/partyB/cordapps/contracts-0.1.jar
 ADD PartyB/certificates/nodekeystore.jks /opt/corda/partyB/certificates/nodekeystore.jks
 ADD PartyB/certificates/truststore.jks /opt/corda/partyB/certificates/truststore.jks
 ADD PartyB/certificates/sslkeystore.jks /opt/corda/partyB/certificates/sslkeystore.jks
